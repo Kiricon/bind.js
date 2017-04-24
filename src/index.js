@@ -13,14 +13,22 @@ class Bind {
                 this[property] = initializer[property];
             }
         }
-        console.log(this);
+        this._bind();
     }
 
     /**
      * Bind class to element.
      */
     _bind() {
+        this.domNode = document.querySelector(this.el);
+        this._bindData();
+    }
 
+    _bindData() {
+        let s = this.domNode.innerHTML;
+        console.log(s);
+        let regExp = /\{\{((?:.|\n)+?)\}\}/g;
+        let bindings = s.match(regExp);
     }
 }
 
