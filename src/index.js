@@ -20,15 +20,35 @@ class Bind {
      * Bind class to element.
      */
     _bind() {
-        this.domNode = document.querySelector(this.el);
+        this._domNode = document.querySelector(this.el);
         this._bindData();
     }
 
+    /**
+     * Get our bindings in our node element
+     */
     _bindData() {
-        let s = this.domNode.innerHTML;
-        console.log(s);
+        this._initialHTML = this._domNode.innerHTML;
         let regExp = /\{\{((?:.|\n)+?)\}\}/g;
-        let bindings = s.match(regExp);
+        this._bindings = this._initialHTML.match(regExp);
+        this._parseBindings();
+    }
+
+    _parseBindings() {
+        let newHTML = this._initialHTML;
+        for(let i = 0; i < this._bindings.length; i++) {
+            let binding = this._bindings[i];
+            let expression = binding.substring(2, binding.length-2);
+            let result = this._parseExpression(expression);
+            newHTML = newHTML.replace(binding, result);
+        }
+        this._domNode.innerHTML = newHTML;
+    }
+
+    _parseExpression(expression) {
+        let returnString = '';
+        returnString = eval(expression).toString();
+        return returnString;
     }
 }
 
