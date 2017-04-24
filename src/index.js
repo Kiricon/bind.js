@@ -50,6 +50,10 @@ class Bind {
         returnString = eval(expression).toString();
         return returnString;
     }
+
+    update() {
+        this._parseBindings();
+    }
 }
 
 window.Bind = Bind;
