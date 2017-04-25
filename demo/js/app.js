@@ -4,9 +4,18 @@ let element = new Bind({
     num: 5,
 });
 
+let button = new Bind({
+    el: '#button',
+    added: 0,
+    init: () => {
+        console.log(this);
+        this.element.addEventListener('click', this.click);
+    },
 
-document.getElementById('button').addEventListener('click', () => {
-    console.log('yee');
-    element.num++;
-    element.update();
+    click: () => {
+        this.added++;
+        this.update();
+        element.num++;
+        element.update();
+    },
 });

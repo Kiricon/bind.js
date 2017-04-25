@@ -14,6 +14,11 @@ class Bind {
             }
         }
         this._bind();
+
+        // Run init script
+        if(typeof this.init == 'function') {
+            this.init.call(this);
+        }
     }
 
     /**
@@ -21,6 +26,7 @@ class Bind {
      */
     _bind() {
         this._domNode = document.querySelector(this.el);
+        this.element = this._domNode;
         this._bindData();
     }
 
@@ -31,9 +37,15 @@ class Bind {
         this._initialHTML = this._domNode.innerHTML;
         let regExp = /\{\{((?:.|\n)+?)\}\}/g;
         this._bindings = this._initialHTML.match(regExp);
-        this._parseBindings();
+        if(this._bindings != null) {
+            this._parseBindings();
+        }
     }
 
+
+    /**
+     * Parse {{}} bindings and return formatted html
+     */
     _parseBindings() {
         let newHTML = this._initialHTML;
         for(let i = 0; i < this._bindings.length; i++) {
@@ -45,12 +57,22 @@ class Bind {
         this._domNode.innerHTML = newHTML;
     }
 
+
+    /**
+     * Parses individual binding expressions and returns string
+     * @param {string} expression - Binding expression
+     * @return {string} - Result of expression parsing
+     */
     _parseExpression(expression) {
         let returnString = '';
         returnString = eval(expression).toString();
         return returnString;
     }
 
+
+    /**
+     * Public facing method for updating the element
+     */
     update() {
         this._parseBindings();
     }
